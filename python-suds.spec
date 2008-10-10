@@ -10,7 +10,6 @@ Source0: %{name}-%{version}.tar.gz
 License: LGPL
 Group: Development/Libraries
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-Prefix: %{_prefix}
 BuildArch: noarch
 Requires: python >= 2.3
 %if 0%{?fedora} >= 8
