@@ -3,7 +3,7 @@
 Summary: A python SOAP client
 Name:  python-suds
 Version: 0.3.1
-Release: 3%{?dist}
+Release: 4%{?dist}
 Source0: https://fedorahosted.org/releases/s/u/%{name}/%{name}-%{version}.tar.gz
 License: LGPLv3+
 Group: Development/Libraries
@@ -57,11 +57,20 @@ rm -rf $RPM_BUILD_ROOT
 %doc README
 
 %changelog
- * Fri Oct 10 2008 jortel <jortel@redhat.com> - 0.3.1-1
-  - Extends the support for multi-port services introduced earlier.  This addition,
-    provides for multiple services to define the *same* method and suds will
-    handle it properly.  See section 'SERVICES WITH MULTIPLE PORTS:'
-  - Add support for multi-document document/literal soap binding style.
-    See section 'MULTI-DOCUMENT Docuemnt/Literal:'
-  - Add support for (xs:group, xs:attributeGroup) tags.
-  - Add Client.last_sent() and Client.last_received().
+* Fri Oct 28 2008 jortel <jortel@redhat.com> - 0.3.1-4
+- Changes acc. #466496 Comment #8
+
+* Fri Oct 27 2008 jortel <jortel@redhat.com> - 0.3.1-3
+- add "rm -rf $RPM_BUILD_ROOT" to install
+
+* Fri Oct 16 2008 jortel <jortel@redhat.com> - 0.3.1-2
+- Changes acc. #466496 Comment #1
+
+* Fri Oct 10 2008 jortel <jortel@redhat.com> - 0.3.1-1
+- Extends the support for multi-port services introduced earlier. This addition, 
+  provides for multiple services to define the *same* method and suds will
+  handle it properly.  See section 'SERVICES WITH MULTIPLE PORTS:'
+- Add support for multi-document document/literal soap binding style.
+  See section 'MULTI-DOCUMENT Docuemnt/Literal:'
+- Add support for (xs:group, xs:attributeGroup) tags.
+- Add Client.last_sent() and Client.last_received().
