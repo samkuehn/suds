@@ -3,7 +3,7 @@
 Summary: A python SOAP client
 Name:  python-suds
 Version: 0.3.1
-Release: 2%{?dist}
+Release: 3%{?dist}
 Source0: https://fedorahosted.org/releases/s/u/%{name}/%{name}-%{version}.tar.gz
 License: LGPLv3+
 Group: Development/Libraries
@@ -32,7 +32,8 @@ pluggable soap bindings.
 python setup.py sdist
 
 %install
-python setup.py install --optimize=1 --root=$RPM_BUILD_ROOT --record=INSTALLED_FILES
+rm -rf $RPM_BUILD_ROOT
+python setup.py install --optimize=1 --root=$RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT
