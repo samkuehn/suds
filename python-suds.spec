@@ -3,7 +3,7 @@
 Summary: A python SOAP client
 Name:  python-suds
 Version: 0.3.1
-Release: 4%{?dist}
+Release: 5%{?dist}
 Source0: https://fedorahosted.org/releases/s/u/%{name}/%{name}-%{version}.tar.gz
 License: LGPLv3+
 Group: Development/Libraries
@@ -54,14 +54,17 @@ rm -rf $RPM_BUILD_ROOT
 %{python_sitelib}/suds/xsd/*.py*
 %{python_sitelib}/tests/*.py*
 
-%doc README
+%doc README LICENSE
 
 %changelog
+* Fri Nov 03 2008 jortel <jortel@redhat.com> - 0.3.1-5
+- Add LICENSE to %%doc.
+
 * Fri Oct 28 2008 jortel <jortel@redhat.com> - 0.3.1-4
 - Changes acc. #466496 Comment #8
 
 * Fri Oct 27 2008 jortel <jortel@redhat.com> - 0.3.1-3
-- add "rm -rf $RPM_BUILD_ROOT" to install
+- Add "rm -rf $RPM_BUILD_ROOT" to install
 
 * Fri Oct 16 2008 jortel <jortel@redhat.com> - 0.3.1-2
 - Changes acc. #466496 Comment #1
