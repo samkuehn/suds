@@ -1,0 +1,82 @@
+diff --git a/suds/wsdl.py b/suds/wsdl.py
+index 8bba88f9951dcc36b84a82aacb003d5fc59e5b36..7fa4185556a52d7d15008d5414779e2179591f03 100644
+--- a/suds/wsdl.py
++++ b/suds/wsdl.py
+@@ -124,7 +124,7 @@ class Definitions(WObject):
+     
+     Tag = 'definitions'
+ 
+-    def __init__(self, url, options):
++    def __init__(self, url, options, alreadyImported=None):
+         """
+         @param url: A URL to the WSDL.
+         @type url: str
+@@ -132,6 +132,11 @@ class Definitions(WObject):
+         @type options: L{options.Options}
+         """
+         log.debug('reading wsdl at: %s ...', url)
++        if alreadyImported == None:
++            topLevel = True
++            alreadyImported = []
++        else:
++            topLevel = False
+         reader = DocumentReader(options)
+         d = reader.open(url)
+         root = d.root()
+@@ -149,12 +154,13 @@ class Definitions(WObject):
+         self.bindings = {}
+         self.services = []
+         self.add_children(self.root)
+-        self.children.sort()
+         pmd = self.__metadata__.__print__
+         pmd.excludes.append('children')
+         pmd.excludes.append('wsdl')
+         pmd.wrappers['schema'] = repr
+-        self.open_imports()
++        self.load_imports(alreadyImported)
++        if not topLevel: return
++        self.children.sort()
+         self.resolve()
+         self.build_schema()
+         self.set_wrapped()
+@@ -196,10 +202,10 @@ class Definitions(WObject):
+                 self.services.append(child)
+                 continue
+                 
+-    def open_imports(self):
++    def load_imports(self, alreadyImported):
+         """ Import the I{imported} WSDLs. """
+         for imp in self.imports:
+-            imp.load(self)
++            imp.load(self, alreadyImported)
+                 
+     def resolve(self):
+         """ Tell all children to resolve themselves """
+@@ -304,14 +310,17 @@ class Import(WObject):
+         pmd = self.__metadata__.__print__
+         pmd.wrappers['imported'] = repr
+         
+-    def load(self, definitions):
++    def load(self, definitions, alreadyImported):
+         """ Load the object by opening the URL """
+         url = self.location
+         log.debug('importing (%s)', url)
+         if '://' not in url:
+             url = urljoin(definitions.url, url)
+         options = definitions.options
+-        d = Definitions(url, options)
++        #d = Definitions(url, options)
++        if url in alreadyImported: return
++        alreadyImported.append(url)
++        d = Definitions(url, definitions.options, alreadyImported)
+         if d.root.match(Definitions.Tag, wsdlns):
+             self.import_definitions(definitions, d)
+             return
+@@ -326,6 +335,7 @@ class Import(WObject):
+         definitions.messages.update(d.messages)
+         definitions.port_types.update(d.port_types)
+         definitions.bindings.update(d.bindings)
++        definitions.children.extend(d.children)
+         self.imported = d
+         log.debug('imported (WSDL):\n%s', d)
+         
